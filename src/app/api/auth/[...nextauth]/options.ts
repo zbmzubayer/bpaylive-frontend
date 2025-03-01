@@ -1,8 +1,8 @@
-import { ENV_SERVER } from "@/config";
-import { ENV_CLIENT } from "@/config/env-client";
 import { type NextAuthOptions } from "next-auth";
 import { type AdapterUser } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+import { ENV_CLIENT, ENV_SERVER } from "@/config";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,11 +11,7 @@ export const authOptions: NextAuthOptions = {
       type: "credentials",
       name: "Credentials",
       credentials: {
-        email: {
-          label: "Email",
-          type: "text",
-          placeholder: "example@gmail.com",
-        },
+        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
@@ -38,6 +34,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.username = user.username;
         token.role = user.role;
       }
       return token;
@@ -45,6 +42,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token && session.user) {
         session.user.id = token.id;
+        session.user.username = token.username;
         session.user.role = token.role;
       }
       return session;
@@ -56,7 +54,6 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/admin",
     error: "/admin",
-    newUser: "/admin/dashboard",
   },
   secret: ENV_SERVER.AUTH_SECRET,
 };
