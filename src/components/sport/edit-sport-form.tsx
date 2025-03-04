@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,33 +10,13 @@ import { getQueryClient } from "@/lib";
 import { sportZodSchema, UpdateSportDto as FormValues } from "@/schema/sport-schema";
 import { updateSport } from "@/services";
 import { Sport } from "@/types";
+import { InputFilePreview } from "@/components/ui/input-file-preview";
 
 type Props = { sport: Sport; onClose: () => void };
 
 export function EditSportForm({ sport, onClose }: Props) {
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(sport.icon as string);
   const [defaultIconFile, setDefaultIconFile] = useState<File | undefined>(undefined);
   const queryClient = getQueryClient();
-
-  useEffect(() => {
-    const loadImageAsFile = async () => {
-      try {
-        const response = await fetch(sport.icon as string);
-        const blob = await response.blob();
-        const filename =
-          typeof sport.icon === "string"
-            ? sport.icon?.substring(sport.icon.lastIndexOf("/") + 1)
-            : "image.jpg";
-        const file = new File([blob], filename, { type: blob.type });
-        setDefaultIconFile(file);
-      } catch (error) {
-        console.error("Error loading image:", error);
-        setDefaultIconFile(undefined);
-      }
-    };
-
-    loadImageAsFile();
-  }, [sport.icon]);
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
     resolver: zodResolver(sportZodSchema.update),
@@ -68,12 +47,24 @@ export function EditSportForm({ sport, onClose }: Props) {
   };
 
   useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
+    const loadImageAsFile = async () => {
+      try {
+        const response = await fetch(sport.icon as string);
+        const blob = await response.blob();
+        const filename =
+          typeof sport.icon === "string"
+            ? sport.icon?.substring(sport.icon.lastIndexOf("/") + 1)
+            : "image.jpg";
+        const file = new File([blob], filename, { type: blob.type });
+        setDefaultIconFile(file);
+      } catch (error) {
+        console.error("Error loading image:", error);
+        setDefaultIconFile(undefined);
       }
     };
-  }, [previewUrl]);
+
+    loadImageAsFile();
+  }, [sport.icon]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -97,52 +88,20 @@ export function EditSportForm({ sport, onClose }: Props) {
       <Controller
         control={control}
         name="icon"
-        render={({ field, fieldState: { error, invalid } }) => (
-          <Input
-            type="file"
-            label="Icon"
-            labelPlacement="outside"
-            variant="faded"
-            description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
-            accept="image/*"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              field.onChange(file);
-              if (file) {
-                setPreviewUrl(URL.createObjectURL(file));
-              }
-            }}
-            isInvalid={invalid}
-            errorMessage={error?.message}
-            className="h-16"
-          />
-        )}
-      />
-      {/* <Controller
-        control={control}
-        name="icon"
-        render={({ field, fieldState: { error, invalid } }) => (
+        render={({ field, fieldState: { error } }) => (
           <InputFilePreview
             type="file"
             label="Icon"
             accept="image/*"
             fileValue={field.value}
+            url={sport.icon as string}
             onFileChange={field.onChange}
             className="h-16"
+            description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
+            error={error?.message}
           />
         )}
-      /> */}
-
-      {previewUrl && (
-        <Image
-          src={previewUrl}
-          alt="Preview"
-          height={100}
-          width={100}
-          className="size-10 rounded-md"
-          crossOrigin="anonymous"
-        />
-      )}
+      />
 
       <Alert
         color="danger"

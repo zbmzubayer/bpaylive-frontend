@@ -1,15 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { Alert, Button, Input } from "@heroui/react";
 import { SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
 import { CreateSportDto as FormValues, sportZodSchema } from "@/schema/sport-schema";
 import { createSport } from "@/services";
-import { Alert, Button, Input } from "@heroui/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { InputFilePreview } from "@/components/ui/input-file-preview";
 
 export function CreateSportForm({ onClose }: { onClose: () => void }) {
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
@@ -30,13 +30,11 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
 
   const onSubmit = async (data: FormValues) => {
     console.log(data);
-    // const formData = new FormData();
-    // formData.append("name", data.name);
-    // formData.append("icon", data.icon);
-    // await mutateAsync(formData);
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("icon", data.icon);
+    await mutateAsync(formData);
   };
-
-  console.log(error);
 
   useEffect(() => {
     return () => {
@@ -68,31 +66,6 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
         control={control}
         name="icon"
         render={({ field, fieldState: { error, invalid } }) => (
-          <Input
-            type="file"
-            label="Icon"
-            labelPlacement="outside"
-            variant="faded"
-            description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
-            onChange={(e) => {
-              const file = e.target.files?.[0];
-              field.onChange(file);
-              if (file) {
-                setPreviewUrl(URL.createObjectURL(file));
-              }
-            }}
-            accept="image/*"
-            isInvalid={invalid}
-            errorMessage={error?.message}
-            className="h-16"
-          />
-        )}
-      />
-
-      {/* <Controller
-        control={control}
-        name="icon"
-        render={({ field, fieldState: { error, invalid } }) => (
           <InputFilePreview
             type="file"
             label="Icon"
@@ -100,19 +73,11 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
             onFileChange={field.onChange}
             accept="image/*"
             className="h-16"
+            description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
+            error={error?.message}
           />
         )}
-      /> */}
-
-      {previewUrl && (
-        <Image
-          src={previewUrl}
-          alt="Preview"
-          height={100}
-          width={100}
-          className="size-10 rounded-md"
-        />
-      )}
+      />
 
       <Alert
         color="danger"
