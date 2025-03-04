@@ -5,13 +5,17 @@ import { FaCalendarDays } from "react-icons/fa6";
 import { useQuery } from "@tanstack/react-query";
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell } from "@heroui/table";
 import { Spinner } from "@heroui/spinner";
-import { getAllUserQuery } from "@/services/query";
 import { User } from "@/types";
 import { EditUserModal } from "@/components/user/edit-user-modal";
 import { DeleteUserModal } from "@/components/user/delete-user-modal";
+import { USER_KEY } from "@/constants/query-key";
+import { getAllUser } from "@/services";
 
 export function UserTable() {
-  const { data, isFetching } = useQuery(getAllUserQuery());
+  const { data, isFetching } = useQuery({
+    queryKey: [USER_KEY],
+    queryFn: getAllUser,
+  });
   const users = data?.data as User[];
 
   return (
