@@ -12,7 +12,6 @@ import { createSport } from "@/services";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
 
 export function CreateSportForm({ onClose }: { onClose: () => void }) {
-  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
   const queryClient = getQueryClient();
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
@@ -29,20 +28,11 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
   });
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("icon", data.icon);
     await mutateAsync(formData);
   };
-
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
