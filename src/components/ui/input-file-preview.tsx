@@ -35,8 +35,6 @@ export function InputFilePreview({
     [onFileChange]
   );
 
-  console.log(previewUrl);
-
   // Update preview when value changes
   useEffect(() => {
     if (typeof fileValue === "string") {
@@ -48,11 +46,6 @@ export function InputFilePreview({
     } else if (!url) {
       setPreviewUrl(undefined);
     }
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
   }, [fileValue]);
 
   useEffect(() => {
