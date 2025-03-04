@@ -86,7 +86,7 @@ export default function LoginForm() {
         isVisible={!!error}
         classNames={{ base: "mt-1" }}
       />
-      <Button type="submit" className="mt-3 w-full text-base font-medium">
+      <Button type="submit" color="primary" className="mt-3 w-full text-base font-medium">
         Login
       </Button>
     </form>
