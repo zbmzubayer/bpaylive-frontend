@@ -105,7 +105,7 @@ export default function EditUserForm({ user, onClose }: Props) {
           type="submit"
           color="primary"
           isLoading={isPending}
-          isDisabled={!formState.isValid || isPending}
+          isDisabled={!formState.isValid || !formState.isDirty || isPending}
         >
           Edit
         </Button>
