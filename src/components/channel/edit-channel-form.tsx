@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,18 +8,38 @@ import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import { Alert, Button, Input, Select, SelectItem } from "@heroui/react";
 import { CHANNEL_KEY, SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
-import { CreateChannelDto as FormValues, channelZodSchema } from "@/schema/channel-schema";
-import { createChannel, getAllSport } from "@/services";
+import { channelZodSchema, UpdateChannelDto as FormValues } from "@/schema/channel-schema";
+import { getAllSport, updateChannel } from "@/services";
+import { ChannelWithSports } from "@/types";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
 import { ENV_CLIENT } from "@/config";
 
-export function CreateChannelForm({ onClose }: { onClose: () => void }) {
+type Props = { channel: ChannelWithSports; onClose: () => void };
+
+export function EditChannelForm({ channel, onClose }: Props) {
+  const { sportChannels, streamUrls } = channel;
+  const [defaultIconFile, setDefaultIconFile] = useState<File | undefined>(undefined);
   const queryClient = getQueryClient();
 
+  const { data } = useSuspenseQuery({
+    queryKey: [SPORT_KEY],
+    queryFn: getAllSport,
+  });
+  const sports = data.data;
+
   const { control, handleSubmit, formState } = useForm<FormValues>({
-    resolver: zodResolver(channelZodSchema.create),
+    resolver: zodResolver(channelZodSchema.update),
     defaultValues: {
-      streamUrls: [{ value: "" }],
+      title: channel.title,
+      icon: defaultIconFile,
+      streamUrls: streamUrls?.map((url) => ({ value: url })),
+      sportChannels: sportChannels?.map((item) => item.sport.id),
+    },
+    values: {
+      title: channel.title,
+      icon: defaultIconFile!,
+      streamUrls: streamUrls?.map((url) => ({ value: url })),
+      sportChannels: sportChannels?.map((item) => item.sport.id),
     },
   });
 
@@ -27,14 +48,8 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
     name: "streamUrls",
   });
 
-  const { data } = useSuspenseQuery({
-    queryKey: [SPORT_KEY],
-    queryFn: getAllSport,
-  });
-  const sports = data.data;
-
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: createChannel,
+    mutationFn: updateChannel,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [CHANNEL_KEY] });
       onClose();
@@ -42,17 +57,35 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
   });
 
   const onSubmit = async (data: FormValues) => {
-    // convert streamUrls to array
-    const streamUrls = data.streamUrls.map((url) => url.value);
+    const streamUrls = data.streamUrls?.map((url) => url.value);
     const formData = new FormData();
-    formData.append("title", data.title);
-    formData.append("icon", data.icon);
+    formData.append("title", data.title!);
+    formData.append("icon", data.icon!);
     formData.append("streamUrls", JSON.stringify(streamUrls));
     formData.append("sportChannels", JSON.stringify(data.sportChannels));
-    console.log(data);
 
-    await mutateAsync(formData);
+    await mutateAsync({ id: channel.id, data: formData });
   };
+
+  useEffect(() => {
+    const loadImageAsFile = async () => {
+      try {
+        const response = await fetch(channel.icon as string);
+        const blob = await response.blob();
+        const filename =
+          typeof channel.icon === "string"
+            ? channel.icon?.substring(channel.icon.lastIndexOf("/") + 1)
+            : "image.jpg";
+        const file = new File([blob], filename, { type: blob.type });
+        setDefaultIconFile(file);
+      } catch (error) {
+        console.error("Error loading image:", error);
+        setDefaultIconFile(undefined);
+      }
+    };
+
+    loadImageAsFile();
+  }, [channel.icon]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -72,6 +105,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
           />
         )}
       />
+
       <Controller
         control={control}
         name="icon"
@@ -79,15 +113,17 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
           <InputFilePreview
             type="file"
             label="Icon"
-            fileValue={field.value}
-            onFileChange={field.onChange}
             accept="image/*"
+            fileValue={field.value}
+            url={channel.icon as string}
+            onFileChange={field.onChange}
             className="h-16"
             description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
             error={error?.message}
           />
         )}
       />
+
       <Controller
         control={control}
         name="sportChannels"
@@ -95,7 +131,6 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
           <Select
             {...field}
             onChange={(e) => {
-              console.log("E", e.target.value);
               if (!e.target.value) {
                 field.onChange(undefined);
                 return;
@@ -103,7 +138,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
               const selectedValues = e.target.value.split(",");
               field.onChange(selectedValues);
             }}
-            selectedKeys={field.value}
+            defaultSelectedKeys={field.value}
             label="Sports"
             placeholder="Select the sports"
             labelPlacement="outside"
@@ -184,7 +219,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
 
       <Alert
         color="danger"
-        title=""
+        title="Error"
         description={error?.message}
         isVisible={!!error}
         classNames={{ base: "mt-1" }}
@@ -199,7 +234,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
           isLoading={isPending}
           isDisabled={!formState.isValid || isPending}
         >
-          Create
+          Edit
         </Button>
       </div>
     </form>
