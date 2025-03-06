@@ -57,7 +57,7 @@ export function InputFilePreview({
   }, [previewUrl]);
 
   return (
-    <div>
+    <div className="inline-flex w-fit gap-1">
       <input
         id="file"
         type="file"
@@ -66,9 +66,13 @@ export function InputFilePreview({
         {...props}
       />
 
-      <label htmlFor="file" className="flex flex-col">
-        <span className="">Icon</span>
-        {description && <span className="mb-1 text-xs text-foreground-400">{description}</span>}
+      <div className="inline-flex max-w-[50%] flex-col gap-1">
+        <label htmlFor="file">Icon</label>
+        {description && (
+          <span className="mb-1 text-balance text-xs text-foreground-400">{description}</span>
+        )}
+      </div>
+      <label htmlFor="file" className="inline-flex cursor-pointer flex-col">
         <div className="inline-flex size-20 cursor-pointer items-center justify-center rounded-md border-2 border-default-200 p-1 text-xs font-medium hover:border-default-400">
           {previewUrl ? (
             <img
@@ -85,7 +89,7 @@ export function InputFilePreview({
           )}
         </div>
       </label>
-      {error && <span className="text-danger">{error}</span>}
+      {error && <span className="self-end text-xs text-danger">{error}</span>}
     </div>
   );
 }
