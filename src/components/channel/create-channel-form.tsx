@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -116,11 +117,13 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
               <SelectItem
                 key={item.id}
                 startContent={
-                  <img
+                  <Image
                     src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${item.icon}`}
                     alt={item.name}
-                    className="h-6 w-6 rounded-full"
+                    width={24}
+                    height={24}
                     crossOrigin="anonymous"
+                    className="h-6 w-6 rounded-full"
                   />
                 }
               >
