@@ -1,16 +1,54 @@
+import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
+import dayjs from "dayjs";
 import { ENV_CLIENT } from "@/config";
 import { ADVERTISEMENT_KEY, MATCH_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
 import { getAllMatches, getMatchByURL } from "@/services";
 import { SuggestedChannels } from "@/components/channel/suggested-channels";
 import { ExpandableText } from "@/components/ui/expandable-text";
-import { FluidPlayer } from "@/components/ui/fluid-player";
 import { getVideoSourceType } from "@/lib/utils";
 import { getAdvertisement } from "@/services/advertisement-service";
 import { SuggestedMatches } from "@/components/match/suggested-matches";
+import { FluidPlayer } from "@/components/ui/fluid-player";
 
-export default async function StreamingPage({ params }: { params: Promise<{ url: string }> }) {
+type Props = {
+  params: Promise<{ url: string }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  // read route params
+  const { url } = await params;
+
+  // fetch data
+  const res = await getMatchByURL(url);
+  const match = res.data;
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: `BetLive24 | ${match.title} - Watch Live Stream`,
+    description: `Watch ${match.title} at ${dayjs(match.startTime).format("MMMM D, YYYY - h:mm A")} live stream on BetLive24. ${match.description}`,
+    keywords: [
+      match.title,
+      match.sport.name,
+      "betlive24",
+      "betlive",
+      "live stream",
+      "watch live",
+      "live sports",
+    ],
+    openGraph: {
+      images: [`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${match.thumbnail}`, ...previousImages],
+    },
+  };
+}
+
+export default async function StreamPage({ params }: { params: Promise<{ url: string }> }) {
   const { url } = await params;
 
   const queryClient = getQueryClient();

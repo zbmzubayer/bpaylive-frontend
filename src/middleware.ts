@@ -15,11 +15,8 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     }
   }
   if (PUBLIC_ROUTES.includes(pathname)) return NextResponse.next();
-  // match /plans/1, /plans/2, /plans/3, etc paths and redirect to /plans/[id]
-  // console.log(pathname);
-  // console.log("1", pathname.match(/^\/plans\/([a-zA-Z0-9-]+)(\?.*)?$/));
-  // console.log("2", pathname.match(/^\/plans\/([a-zA-Z0-9-]+)(\?.*)?$/));
-  // if (pathname.match(/^\/plans\/([a-zA-Z0-9-]+)(\?.*)?$/)) return NextResponse.next();
+  // if pathname starts expect /admin and not in AUTH_ROUTES
+  if (!pathname.startsWith("/admin")) return NextResponse.next();
 
   // Example custom logic: Allow access only if the pathname contains "admin"
   // if (pathname.startsWith("/admin")) {
