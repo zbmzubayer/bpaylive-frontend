@@ -3,8 +3,8 @@ import { AdvertisementCarousel } from "@/components/advertisement/advertisement-
 import AdvertisementPopup from "@/components/advertisement/advertisement-popup";
 import { RecommendedChannels } from "@/components/channel/recommended-channels";
 import { TrendingMatches } from "@/components/match/trending-matches";
-// import { ADVERTISEMENT_KEY, CHANNEL_KEY, MATCH_KEY } from "@/constants/query-key";
-// import { getQueryClient } from "@/lib";
+import { ADVERTISEMENT_KEY, CHANNEL_KEY, MATCH_KEY } from "@/constants/query-key";
+import { getQueryClient } from "@/lib";
 import { getAllChannel, getAllMatches } from "@/services";
 import { getAdvertisement } from "@/services/advertisement-service";
 
@@ -15,26 +15,19 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  // const queryClient = getQueryClient();
-  // const { data: advertisementData } = await queryClient.fetchQuery({
-  //   queryKey: [ADVERTISEMENT_KEY],
-  //   queryFn: getAdvertisement,
-  // });
-  // const { data: matchesData } = await queryClient.fetchQuery({
-  //   queryKey: [MATCH_KEY],
-  //   queryFn: getAllMatches,
-  // });
-  // const { data: channelsData } = await queryClient.fetchQuery({
-  //   queryKey: [CHANNEL_KEY],
-  //   queryFn: getAllChannel,
-  // });
-
-  const res1 = await getAdvertisement();
-  const advertisementData = res1?.data;
-  const res2 = await getAllMatches();
-  const matchesData = res2?.data;
-  const res3 = await getAllChannel();
-  const channelsData = res3?.data;
+  const queryClient = getQueryClient();
+  const { data: advertisementData } = await queryClient.fetchQuery({
+    queryKey: [ADVERTISEMENT_KEY],
+    queryFn: getAdvertisement,
+  });
+  const { data: matchesData } = await queryClient.fetchQuery({
+    queryKey: [MATCH_KEY],
+    queryFn: getAllMatches,
+  });
+  const { data: channelsData } = await queryClient.fetchQuery({
+    queryKey: [CHANNEL_KEY],
+    queryFn: getAllChannel,
+  });
 
   const carouselBanners = [
     advertisementData?.carouselBanner1,

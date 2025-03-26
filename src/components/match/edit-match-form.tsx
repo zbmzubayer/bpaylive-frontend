@@ -44,7 +44,7 @@ export function EditMatchForm({ match, onClose }: Props) {
       title: match.title,
       description: match.description,
       url: match.url,
-      thumbnail: `${match.thumbnail}`,
+      thumbnail: match.thumbnail,
       startTime: match.startTime,
       trending: match.trending,
       // hasFakeViews: match.hasFakeViews,
@@ -387,7 +387,7 @@ export function EditMatchForm({ match, onClose }: Props) {
           type="submit"
           color="primary"
           isLoading={isPending}
-          isDisabled={!formState.isValid || isPending}
+          isDisabled={!formState.isValid || !formState.isDirty || isPending}
         >
           Save
         </Button>

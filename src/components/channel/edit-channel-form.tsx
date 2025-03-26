@@ -28,13 +28,6 @@ export function EditChannelForm({ channel, onClose }: Props) {
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
     resolver: zodResolver(channelZodSchema),
-    defaultValues: {
-      title: channel.title,
-      icon: channel.icon,
-      recommended: channel.recommended,
-      streamUrls: streamUrls?.map((url) => ({ value: url })),
-      sportChannels: sportChannels?.map((item) => item.sport.id),
-    },
     values: {
       title: channel.title,
       icon: channel.icon,
@@ -60,8 +53,8 @@ export function EditChannelForm({ channel, onClose }: Props) {
   const onSubmit = async (data: FormValues) => {
     const streamUrls = data.streamUrls?.map((url) => url.value);
     const formData = new FormData();
-    formData.append("title", data.title!);
-    formData.append("icon", data.icon!);
+    formData.append("title", data.title);
+    formData.append("icon", data.icon);
     formData.append("recommended", JSON.stringify(data.recommended));
     formData.append("streamUrls", JSON.stringify(streamUrls));
     formData.append("sportChannels", JSON.stringify(data.sportChannels));

@@ -11,7 +11,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://betlive24.com"),
+  metadataBase: new URL("https://betpay24.live"),
   title: "BetLive24",
   description: "Watch live sports and enjoy the best matches on BetLive24.",
   keywords: [

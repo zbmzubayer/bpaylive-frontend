@@ -21,7 +21,7 @@ export function EditSportForm({ sport, onClose }: Props) {
     resolver: zodResolver(sportZodSchema),
     values: {
       name: sport.name,
-      icon: sport.icon!,
+      icon: sport.icon,
     },
   });
 

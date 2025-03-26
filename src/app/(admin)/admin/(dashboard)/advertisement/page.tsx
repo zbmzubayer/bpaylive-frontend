@@ -9,7 +9,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 export default async function AdvertisementPage() {
   const queryClient = getQueryClient();
-  queryClient.prefetchQuery({ queryKey: [ADVERTISEMENT_KEY], queryFn: getAdvertisement });
+  await queryClient.prefetchQuery({ queryKey: [ADVERTISEMENT_KEY], queryFn: getAdvertisement });
 
   return (
     <div>

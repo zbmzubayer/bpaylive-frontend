@@ -42,7 +42,7 @@ export function AdvertisementCarousel({ banners }: { banners: Array<string | und
   }, [isAutoPlaying, nextSlide]);
 
   return (
-    <div className="relative h-[14rem] w-full overflow-hidden rounded-2xl shadow-xl sm:h-[25rem] lg:h-[30rem]">
+    <div className="relative h-[10rem] w-full overflow-hidden rounded-2xl shadow-xl sm:h-[25rem] lg:h-[30rem]">
       {/* Slides */}
       <div
         className="flex h-full transition-transform duration-500 ease-in-out"
