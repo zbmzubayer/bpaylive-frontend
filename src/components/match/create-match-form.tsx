@@ -60,7 +60,6 @@ export function CreateMatchForm({ onClose }: { onClose: () => void }) {
   };
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description!);
@@ -313,7 +312,6 @@ export function CreateMatchForm({ onClose }: { onClose: () => void }) {
               <Select
                 value={field.value}
                 onChange={(e) => {
-                  console.log("E", e.target.value);
                   if (!e.target.value) {
                     field.onChange(undefined);
                     return;

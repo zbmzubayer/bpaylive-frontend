@@ -39,8 +39,6 @@ export function InputFilePreview({
     }
   };
 
-  console.log(previewUrl);
-
   const handleFileRemove = () => {
     if (fileValue || url) {
       onFileChange(undefined);

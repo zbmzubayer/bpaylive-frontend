@@ -51,7 +51,6 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
     formData.append("recommended", JSON.stringify(data.recommended));
     formData.append("streamUrls", JSON.stringify(streamUrls));
     formData.append("sportChannels", JSON.stringify(data.sportChannels));
-    console.log(data);
 
     await mutateAsync(formData);
   };
