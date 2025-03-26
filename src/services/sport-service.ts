@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/lib";
-import { CreateSportDto, UpdateSportDto } from "@/schema/sport-schema";
 import { Sport } from "@/types";
 
 const SPORT_ENDPOINT = "/sport";

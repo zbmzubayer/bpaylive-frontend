@@ -11,9 +11,10 @@ import Link from "next/link";
 import { FaBars, FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 
-export default function DashboardDrawer() {
+export function DashboardDrawer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { data } = useSession();
+  if (!data) return null;
 
   return (
     <>
@@ -37,7 +38,7 @@ export default function DashboardDrawer() {
                   <ToggleTheme size="sm" className="w-full rounded-lg" />
                   <div className="my-3 flex items-center gap-1 rounded-lg bg-default px-3 py-2 text-sm font-medium text-foreground">
                     <FaUserCircle className="size-5" />
-                    <p>{data?.user.username}</p>
+                    <p>{data?.user?.username}</p>
                   </div>
                   <nav>
                     <ul className="text-sm">

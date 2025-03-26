@@ -73,6 +73,9 @@ function SportsDropdownMenu({ sports, isFetching }: { sports: Sport[]; isFetchin
               {sport.name}
             </li>
           ))}
+          {sports?.length === 0 && (
+            <li className="px-4 py-2 text-sm text-gray-300">No sports available</li>
+          )}
         </ul>
       </div>
     </div>
@@ -111,6 +114,9 @@ function ChannelsDropdownMenu({
               {item.title}
             </li>
           ))}
+          {channels?.length === 0 && (
+            <li className="px-4 py-2 text-sm text-gray-300">No channels available</li>
+          )}
         </ul>
       </div>
     </div>

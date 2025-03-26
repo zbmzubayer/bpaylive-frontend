@@ -54,7 +54,7 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
       <Controller
         control={control}
         name="icon"
-        render={({ field, fieldState: { error, invalid } }) => (
+        render={({ field, fieldState: { error } }) => (
           <InputFilePreview
             type="file"
             label="Icon"

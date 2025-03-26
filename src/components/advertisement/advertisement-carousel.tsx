@@ -6,10 +6,10 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { cn } from "@heroui/react";
 import { ENV_CLIENT } from "@/config";
 
-export function AdvertisementCarousel({ banners }: { banners: string[] }) {
+export function AdvertisementCarousel({ banners }: { banners: Array<string | undefined> }) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const slideCount = banners.length;
+  const slideCount = banners?.length;
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === slideCount - 1 ? 0 : prev + 1));

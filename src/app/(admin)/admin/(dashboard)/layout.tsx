@@ -1,5 +1,4 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import DashboardDrawer from "@/layouts/dashboard/dashboard-drawer";
 import DashboardSidebar from "@/layouts/dashboard/dashboard-sidebar";
 
 export default function DashboardLayout({ children }: Readonly<{ children: React.ReactNode }>) {

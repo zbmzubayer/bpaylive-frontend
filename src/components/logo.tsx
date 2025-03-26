@@ -1,8 +1,6 @@
-import { cn } from "@heroui/react";
-import { useTheme } from "next-themes";
-import Image, { type ImageProps } from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
+import Image, { type ImageProps } from "next/image";
+import { cn } from "@heroui/react";
 
 type LogoProps = Omit<ImageProps, "src" | "alt">;
 

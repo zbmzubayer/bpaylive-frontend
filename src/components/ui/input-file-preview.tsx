@@ -57,7 +57,7 @@ export function InputFilePreview({
       // If value is a File, create a URL for preview
       setPreviewUrl(URL.createObjectURL(fileValue));
     }
-  }, [fileValue]);
+  }, [url, fileValue]);
 
   useEffect(() => {
     return () => {
@@ -74,7 +74,7 @@ export function InputFilePreview({
         type="file"
         multiple
         onChange={handleFileChange}
-        className={cn("hidden")}
+        className={cn("hidden", className)}
         {...props}
       />
       <div className="inline-flex max-w-[50%] flex-col gap-1">

@@ -1,7 +1,6 @@
 import { useTheme } from "next-themes";
 import { Button, ButtonProps } from "@heroui/button";
 import { MdLightMode } from "react-icons/md";
-import { cn } from "@heroui/react";
 import { RiMoonClearFill } from "react-icons/ri";
 
 export function UserToggleTheme({ ...props }: ButtonProps) {

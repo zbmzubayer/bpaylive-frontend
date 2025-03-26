@@ -1,12 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Alert, Button, form, Input, Select, SelectItem, Switch } from "@heroui/react";
+import { Alert, Button, Input, Select, SelectItem, Switch } from "@heroui/react";
 import { CHANNEL_KEY, SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
 import { channelZodSchema, ChannelDto as FormValues } from "@/schema/channel-schema";

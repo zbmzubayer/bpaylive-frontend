@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useSuspenseQueries, useSuspenseQuery } from "@tanstack/react-query";
+import { useMutation, useSuspenseQueries } from "@tanstack/react-query";
 import {
   Alert,
   Button,
@@ -167,7 +167,7 @@ export function CreateMatchForm({ onClose }: { onClose: () => void }) {
           <Controller
             control={control}
             name="startTime"
-            render={({ field, fieldState: { error } }) => (
+            render={({ field, fieldState: { error, invalid } }) => (
               <DatePicker
                 value={getCalendarDate(field.value)}
                 onChange={(value) => handleDateChange(value, field.onChange)}
@@ -177,6 +177,8 @@ export function CreateMatchForm({ onClose }: { onClose: () => void }) {
                 label="Match Start Time"
                 labelPlacement="outside"
                 variant="bordered"
+                isInvalid={invalid}
+                errorMessage={error?.message}
               />
             )}
           />

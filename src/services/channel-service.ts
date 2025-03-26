@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib";
-import { Channel, ChannelWithSports } from "@/types";
+import { ChannelWithSports } from "@/types";
 
 const CHANNEL_ENDPOINT = "/channel";
 

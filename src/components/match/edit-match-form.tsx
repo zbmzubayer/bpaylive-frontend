@@ -186,7 +186,7 @@ export function EditMatchForm({ match, onClose }: Props) {
           <Controller
             control={control}
             name="startTime"
-            render={({ field, fieldState: { error } }) => (
+            render={({ field, fieldState: { error, invalid } }) => (
               <DatePicker
                 value={getCalendarDate(field.value)}
                 onChange={(value) => handleDateChange(value, field.onChange)}
@@ -196,6 +196,8 @@ export function EditMatchForm({ match, onClose }: Props) {
                 label="Match Start Time"
                 labelPlacement="outside"
                 variant="bordered"
+                isInvalid={invalid}
+                errorMessage={error?.message}
               />
             )}
           />

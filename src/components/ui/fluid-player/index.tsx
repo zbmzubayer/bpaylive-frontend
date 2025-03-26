@@ -12,11 +12,11 @@ interface FluidPlayerProps {
 
 export function FluidPlayer({ url, title, type }: FluidPlayerProps) {
   const self = useRef<HTMLVideoElement | null>(null);
-  let player: FluidPlayerInstance | null = null;
+  const player = useRef<FluidPlayerInstance | null>(null);
 
   useEffect(() => {
-    if (!player) {
-      player = fluidPlayer(self.current as HTMLVideoElement, {
+    if (!player.current) {
+      player.current = fluidPlayer(self.current as HTMLVideoElement, {
         layoutControls: {
           fillToContainer: true,
           autoPlay: true,

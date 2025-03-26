@@ -6,7 +6,7 @@ export type Match = {
   title: string;
   description: string;
   url: string;
-  thumbnail: any;
+  thumbnail: string;
   startTime: Date;
   trending: boolean;
   tags: string[];

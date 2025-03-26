@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib";
+import { cache } from "react";
 import { MatchWithSportAndChannel } from "@/types/match";
 
 const MATCH_ENDPOINT = "/match";
@@ -23,6 +24,6 @@ export const deleteMatch = async (id: string) => {
   return axiosInstance.delete(`${MATCH_ENDPOINT}/${id}`);
 };
 
-export const getMatchByURL = async (url: string) => {
+export const getMatchByURL = cache(async (url: string) => {
   return axiosInstance.get<MatchWithSportAndChannel>(`${MATCH_ENDPOINT}/url/${url}`);
-};
+});
