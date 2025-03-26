@@ -6,7 +6,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Alert, Button, Input } from "@heroui/react";
 import { SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
-import { CreateSportDto as FormValues, sportZodSchema } from "@/schema/sport-schema";
+import { SportDto as FormValues, sportZodSchema } from "@/schema/sport-schema";
 import { createSport } from "@/services";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
 
@@ -14,7 +14,7 @@ export function CreateSportForm({ onClose }: { onClose: () => void }) {
   const queryClient = getQueryClient();
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
-    resolver: zodResolver(sportZodSchema.create),
+    resolver: zodResolver(sportZodSchema),
     defaultValues: undefined,
   });
 

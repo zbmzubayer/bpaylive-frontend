@@ -7,26 +7,22 @@ import { useMutation } from "@tanstack/react-query";
 import { Alert, Button, Input } from "@heroui/react";
 import { SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
-import { sportZodSchema, UpdateSportDto as FormValues } from "@/schema/sport-schema";
+import { sportZodSchema, SportDto as FormValues } from "@/schema/sport-schema";
 import { updateSport } from "@/services";
 import { Sport } from "@/types";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
+import { ENV_CLIENT } from "@/config";
 
 type Props = { sport: Sport; onClose: () => void };
 
 export function EditSportForm({ sport, onClose }: Props) {
-  const [defaultIconFile, setDefaultIconFile] = useState<File | undefined>(undefined);
   const queryClient = getQueryClient();
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
-    resolver: zodResolver(sportZodSchema.update),
-    defaultValues: {
-      name: sport.name,
-      icon: defaultIconFile,
-    },
+    resolver: zodResolver(sportZodSchema),
     values: {
       name: sport.name,
-      icon: defaultIconFile!,
+      icon: sport.icon!,
     },
   });
 
@@ -45,26 +41,6 @@ export function EditSportForm({ sport, onClose }: Props) {
 
     await mutateAsync({ id: sport.id, data: formData });
   };
-
-  useEffect(() => {
-    const loadImageAsFile = async () => {
-      try {
-        const response = await fetch(sport.icon as string);
-        const blob = await response.blob();
-        const filename =
-          typeof sport.icon === "string"
-            ? sport.icon?.substring(sport.icon.lastIndexOf("/") + 1)
-            : "image.jpg";
-        const file = new File([blob], filename, { type: blob.type });
-        setDefaultIconFile(file);
-      } catch (error) {
-        console.error("Error loading image:", error);
-        setDefaultIconFile(undefined);
-      }
-    };
-
-    loadImageAsFile();
-  }, [sport.icon]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -93,8 +69,8 @@ export function EditSportForm({ sport, onClose }: Props) {
             type="file"
             label="Icon"
             accept="image/*"
+            url={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${field.value}`}
             fileValue={field.value}
-            url={sport.icon as string}
             onFileChange={field.onChange}
             className="h-16"
             description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
@@ -118,7 +94,7 @@ export function EditSportForm({ sport, onClose }: Props) {
           type="submit"
           color="primary"
           isLoading={isPending}
-          isDisabled={!formState.isValid || isPending}
+          isDisabled={!formState.isValid || !formState.isDirty || isPending}
         >
           Edit
         </Button>

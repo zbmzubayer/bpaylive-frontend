@@ -1,9 +1,9 @@
 import { z } from "zod";
 
-const create = z.object({
+export const sportZodSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  icon: z.instanceof(File, { message: "Icon is required" }).refine(
-    (file) => {
+  icon: z.any().refine((file) => {
+    if (file instanceof File) {
       const acceptedImageTypes = [
         "image/jpg",
         "image/jpeg",
@@ -12,18 +12,13 @@ const create = z.object({
         "image/svg+xml",
       ]; // Add more if needed
       return acceptedImageTypes.includes(file.type);
-    },
-    {
-      message: "Please upload a valid image file (JPG, JPEG, PNG, or SVG).",
+    } else if (typeof file === "string") {
+      const acceptedImageTypes = ["jpg", "jpeg", "png", "webp", "svg"]; // Add more if needed
+      const fileExtension = file.split(".").pop();
+      return acceptedImageTypes.includes(fileExtension!);
     }
-  ),
+    return false;
+  }, "Invalid file type"),
 });
 
-const update = create;
-
-type CreateSportDto = z.infer<typeof create>;
-type UpdateSportDto = z.infer<typeof update>;
-
-export type { CreateSportDto, UpdateSportDto };
-
-export const sportZodSchema = { create, update };
+export type SportDto = z.infer<typeof sportZodSchema>;

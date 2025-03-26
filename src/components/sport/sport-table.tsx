@@ -20,11 +20,6 @@ export function SportTable() {
   });
   const sports = data?.data as Sport[];
 
-  const sportsWithIcons = sports?.map((item) => ({
-    ...item,
-    icon: `${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${item.icon}`,
-  }));
-
   return (
     <Table isStriped aria-label="Sport table" classNames={{ th: "text-sm" }}>
       <TableHeader>
@@ -39,12 +34,12 @@ export function SportTable() {
         <TableColumn>Action</TableColumn>
       </TableHeader>
       <TableBody isLoading={isFetching} loadingContent={<Spinner />} emptyContent="No data found">
-        {sportsWithIcons?.map((item) => (
+        {sports?.map((item) => (
           <TableRow key={item.id}>
             <TableCell>{item.name}</TableCell>
             <TableCell>
               <Image
-                src={item.icon}
+                src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${item.icon}`}
                 alt={item.name}
                 width={40}
                 height={40}

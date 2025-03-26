@@ -6,10 +6,10 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Alert, Button, Input, Select, SelectItem } from "@heroui/react";
+import { Alert, Button, form, Input, Select, SelectItem, Switch } from "@heroui/react";
 import { CHANNEL_KEY, SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
-import { channelZodSchema, UpdateChannelDto as FormValues } from "@/schema/channel-schema";
+import { channelZodSchema, ChannelDto as FormValues } from "@/schema/channel-schema";
 import { getAllSport, updateChannel } from "@/services";
 import { ChannelWithSports } from "@/types";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
@@ -19,7 +19,6 @@ type Props = { channel: ChannelWithSports; onClose: () => void };
 
 export function EditChannelForm({ channel, onClose }: Props) {
   const { sportChannels, streamUrls } = channel;
-  const [defaultIconFile, setDefaultIconFile] = useState<File | undefined>(undefined);
   const queryClient = getQueryClient();
 
   const { data } = useSuspenseQuery({
@@ -29,16 +28,18 @@ export function EditChannelForm({ channel, onClose }: Props) {
   const sports = data.data;
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
-    resolver: zodResolver(channelZodSchema.update),
+    resolver: zodResolver(channelZodSchema),
     defaultValues: {
       title: channel.title,
-      icon: defaultIconFile,
+      icon: channel.icon,
+      recommended: channel.recommended,
       streamUrls: streamUrls?.map((url) => ({ value: url })),
       sportChannels: sportChannels?.map((item) => item.sport.id),
     },
     values: {
       title: channel.title,
-      icon: defaultIconFile!,
+      icon: channel.icon,
+      recommended: channel.recommended,
       streamUrls: streamUrls?.map((url) => ({ value: url })),
       sportChannels: sportChannels?.map((item) => item.sport.id),
     },
@@ -62,34 +63,15 @@ export function EditChannelForm({ channel, onClose }: Props) {
     const formData = new FormData();
     formData.append("title", data.title!);
     formData.append("icon", data.icon!);
+    formData.append("recommended", JSON.stringify(data.recommended));
     formData.append("streamUrls", JSON.stringify(streamUrls));
     formData.append("sportChannels", JSON.stringify(data.sportChannels));
 
     await mutateAsync({ id: channel.id, data: formData });
   };
 
-  useEffect(() => {
-    const loadImageAsFile = async () => {
-      try {
-        const response = await fetch(channel.icon as string);
-        const blob = await response.blob();
-        const filename =
-          typeof channel.icon === "string"
-            ? channel.icon?.substring(channel.icon.lastIndexOf("/") + 1)
-            : "image.jpg";
-        const file = new File([blob], filename, { type: blob.type });
-        setDefaultIconFile(file);
-      } catch (error) {
-        console.error("Error loading image:", error);
-        setDefaultIconFile(undefined);
-      }
-    };
-
-    loadImageAsFile();
-  }, [channel.icon]);
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
       <Controller
         control={control}
         name="title"
@@ -102,7 +84,6 @@ export function EditChannelForm({ channel, onClose }: Props) {
             variant="bordered"
             isInvalid={invalid}
             errorMessage={error?.message}
-            className="h-16"
           />
         )}
       />
@@ -115,8 +96,8 @@ export function EditChannelForm({ channel, onClose }: Props) {
             type="file"
             label="Icon"
             accept="image/*"
+            url={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${field.value}`}
             fileValue={field.value}
-            url={channel.icon as string}
             onFileChange={field.onChange}
             className="h-16"
             description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
@@ -124,7 +105,22 @@ export function EditChannelForm({ channel, onClose }: Props) {
           />
         )}
       />
-
+      <Controller
+        control={control}
+        name="recommended"
+        render={({ field }) => (
+          <Switch
+            isSelected={field.value}
+            onValueChange={field.onChange}
+            classNames={{
+              base: "flex flex-row-reverse justify-between max-w-full",
+              label: "ms-0",
+            }}
+          >
+            Is this channel recommended?
+          </Switch>
+        )}
+      />
       <Controller
         control={control}
         name="sportChannels"
@@ -214,7 +210,7 @@ export function EditChannelForm({ channel, onClose }: Props) {
         type="button"
         size="sm"
         onPress={() => append({ value: "" })}
-        className="mt-1"
+        className="mt-1 w-fit"
       >
         <FaPlus className="4" />
         Add Another URL
@@ -235,7 +231,7 @@ export function EditChannelForm({ channel, onClose }: Props) {
           type="submit"
           color="primary"
           isLoading={isPending}
-          isDisabled={!formState.isValid || isPending}
+          isDisabled={!formState.isValid || !formState.isDirty || isPending}
         >
           Edit
         </Button>

@@ -5,10 +5,10 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { FaPlus, FaTrash } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
-import { Alert, Button, Input, Select, SelectItem } from "@heroui/react";
+import { Alert, Button, Input, Select, SelectItem, Switch } from "@heroui/react";
 import { CHANNEL_KEY, SPORT_KEY } from "@/constants/query-key";
 import { getQueryClient } from "@/lib";
-import { CreateChannelDto as FormValues, channelZodSchema } from "@/schema/channel-schema";
+import { ChannelDto as FormValues, channelZodSchema } from "@/schema/channel-schema";
 import { createChannel, getAllSport } from "@/services";
 import { InputFilePreview } from "@/components/ui/input-file-preview";
 import { ENV_CLIENT } from "@/config";
@@ -17,7 +17,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
   const queryClient = getQueryClient();
 
   const { control, handleSubmit, formState } = useForm<FormValues>({
-    resolver: zodResolver(channelZodSchema.create),
+    resolver: zodResolver(channelZodSchema),
     defaultValues: {
       streamUrls: [{ value: "" }],
     },
@@ -48,6 +48,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("icon", data.icon);
+    formData.append("recommended", JSON.stringify(data.recommended));
     formData.append("streamUrls", JSON.stringify(streamUrls));
     formData.append("sportChannels", JSON.stringify(data.sportChannels));
     console.log(data);
@@ -56,7 +57,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-2">
       <Controller
         control={control}
         name="title"
@@ -69,7 +70,6 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
             variant="bordered"
             isInvalid={invalid}
             errorMessage={error?.message}
-            className="h-16"
           />
         )}
       />
@@ -87,6 +87,22 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
             description="Upload an image file (JPEG, PNG, SVG), Recommended: Square(1:1) size & SVG"
             error={error?.message}
           />
+        )}
+      />
+      <Controller
+        control={control}
+        name="recommended"
+        render={({ field }) => (
+          <Switch
+            isSelected={field.value}
+            onValueChange={field.onChange}
+            classNames={{
+              base: "flex flex-row-reverse justify-between max-w-full",
+              label: "ms-0",
+            }}
+          >
+            Is this channel recommended?
+          </Switch>
         )}
       />
       <Controller
@@ -179,7 +195,7 @@ export function CreateChannelForm({ onClose }: { onClose: () => void }) {
         type="button"
         size="sm"
         onPress={() => append({ value: "" })}
-        className="mt-1"
+        className="mt-1 w-fit"
       >
         <FaPlus className="4" />
         Add Another URL

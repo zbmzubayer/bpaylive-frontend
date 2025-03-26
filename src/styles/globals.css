@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --heroui-background: 188 54% 18%;
+  --heroui-primary: 128 53% 46%;
+  --accent: 183 96% 11%;
+  --border: 184 100% 11%;
+}
+.dark {
+  --heroui-background: 0 0% 0%;
+  --heroui-primary: 188 54% 18%;
+  --accent: 0 0% 9%;
+  --border: 0 0% 15%;
+}
+
+@layer utilities {
+  .h1 {
+    @apply text-2xl font-bold;
+  }
+  .h2 {
+    @apply text-xl font-bold;
+  }
+  .h3 {
+    @apply text-lg font-bold;
+  }
+}

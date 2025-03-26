@@ -6,6 +6,7 @@ import { getNextAuthToken } from "@/actions/cookie";
 
 const axiosInstance = axios.create({
   baseURL: ENV_CLIENT.NEXT_PUBLIC_API_BASE_URL,
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
