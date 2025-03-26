@@ -7,7 +7,10 @@ export default {
     extend: {
       container: {
         center: true,
-        padding: "2rem",
+        padding: {
+          DEFAULT: "1rem",
+          lg: "2rem",
+        },
       },
       colors: {
         accent: "hsl(var(--accent))",
