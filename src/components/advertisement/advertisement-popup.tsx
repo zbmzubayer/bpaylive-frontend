@@ -5,7 +5,16 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { LuX } from "react-icons/lu";
 
-export default function AdvertisementPopup({ popupBanner }: { popupBanner: string }) {
+interface AdvertisementPopupProps {
+  popupBanner: string;
+  popupBannerUrl?: string;
+}
+
+export default function AdvertisementPopup({
+  popupBanner,
+  popupBannerUrl,
+}: AdvertisementPopupProps) {
+  popupBannerUrl = popupBannerUrl || undefined;
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -44,12 +53,14 @@ export default function AdvertisementPopup({ popupBanner }: { popupBanner: strin
 
         {/* Content */}
         <div className="relative h-[350px]">
-          <Image
-            src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${popupBanner}`}
-            alt="Advertisement"
-            fill
-            className="mb-4 rounded-lg"
-          />
+          <a href={popupBannerUrl}>
+            <Image
+              src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${popupBanner}`}
+              alt="Advertisement"
+              fill
+              className="rounded-lg"
+            />
+          </a>
         </div>
       </div>
     </div>

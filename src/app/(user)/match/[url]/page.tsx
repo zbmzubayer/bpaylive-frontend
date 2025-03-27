@@ -64,6 +64,7 @@ export default async function StreamPage({ params }: { params: Promise<{ url: st
     queryKey: [ADVERTISEMENT_KEY],
     queryFn: getAdvertisement,
   });
+  const streamBannerUrl = advertisement?.streamBannerUrl || undefined;
 
   const suggestedChannels = data.channelMatches
     .filter((item) => item.channel.id !== data.defaultChannel.id)
@@ -102,14 +103,16 @@ export default async function StreamPage({ params }: { params: Promise<{ url: st
 
           <ExpandableText text={data.description} className="mt-3" />
         </div>
-        <div className="relative mt-5 h-[250px]">
+        <div className="relative mt-5 h-[120px]">
           {advertisement?.streamBanner && (
-            <Image
-              src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${advertisement?.streamBanner}`}
-              alt="Advertisement"
-              fill
-              className="w-full rounded-2xl object-cover"
-            />
+            <a href={streamBannerUrl}>
+              <Image
+                src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${advertisement?.streamBanner}`}
+                alt="Advertisement"
+                fill
+                className="w-full rounded-2xl object-cover"
+              />
+            </a>
           )}
         </div>
         <div className="mt-5">

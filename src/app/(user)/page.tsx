@@ -37,16 +37,32 @@ export default async function Home() {
     advertisementData?.carouselBanner5,
   ]?.filter((banner) => banner !== null && banner !== undefined);
 
+  const carouselBannerUrls = [
+    advertisementData?.carouselBanner1Url,
+    advertisementData?.carouselBanner2Url,
+    advertisementData?.carouselBanner3Url,
+    advertisementData?.carouselBanner4Url,
+    advertisementData?.carouselBanner5Url,
+  ]?.filter((url) => url !== "" && url !== null && url !== undefined);
+
+  const carouselBannersWithUrls = carouselBanners?.map((banner, index) => ({
+    banner,
+    url: carouselBannerUrls[index] ?? undefined,
+  }));
+
   const trendingMatches = matchesData?.filter((item) => item?.trending);
   const recommendedChannels = channelsData?.filter((item) => item?.recommended);
 
   return (
     <div className="space-y-10">
       {advertisementData?.popupBanner && (
-        <AdvertisementPopup popupBanner={advertisementData.popupBanner} />
+        <AdvertisementPopup
+          popupBanner={advertisementData.popupBanner}
+          popupBannerUrl={advertisementData?.popupBannerUrl}
+        />
       )}
       {advertisementData && carouselBanners?.length > 0 && (
-        <AdvertisementCarousel banners={carouselBanners} />
+        <AdvertisementCarousel bannersWithUrl={carouselBannersWithUrls} />
       )}
       <TrendingMatches matches={trendingMatches} />
       <RecommendedChannels channels={recommendedChannels} />

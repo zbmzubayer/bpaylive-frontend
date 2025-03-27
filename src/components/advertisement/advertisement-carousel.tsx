@@ -6,10 +6,14 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { cn } from "@heroui/react";
 import { ENV_CLIENT } from "@/config";
 
-export function AdvertisementCarousel({ banners }: { banners: Array<string | undefined> }) {
+interface AdvertisementCarouselProps {
+  bannersWithUrl: Array<{ banner: string; url?: string }>;
+}
+
+export function AdvertisementCarousel({ bannersWithUrl }: AdvertisementCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const slideCount = banners?.length;
+  const slideCount = bannersWithUrl?.length;
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === slideCount - 1 ? 0 : prev + 1));
@@ -48,17 +52,19 @@ export function AdvertisementCarousel({ banners }: { banners: Array<string | und
         className="flex h-full transition-transform duration-500 ease-in-out"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
-        {banners.map((slide, index) => (
+        {bannersWithUrl.map((slide, index) => (
           <div key={index} className={`relative h-full w-full flex-shrink-0`}>
             {/* Background effects */}
-            <Image
-              src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${slide}`}
-              alt={`Banner ${index + 1}`}
-              fill
-              priority
-              crossOrigin="anonymous"
-              className="w-full object-cover"
-            />
+            <a href={slide.url}>
+              <Image
+                src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${slide.banner}`}
+                alt={`Banner ${index + 1}`}
+                fill
+                priority
+                crossOrigin="anonymous"
+                className="w-full object-cover"
+              />
+            </a>
           </div>
         ))}
       </div>
@@ -82,7 +88,7 @@ export function AdvertisementCarousel({ banners }: { banners: Array<string | und
 
       {/* Navigation dots */}
       <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 transform space-x-2">
-        {banners.map((_, index) => (
+        {bannersWithUrl.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
