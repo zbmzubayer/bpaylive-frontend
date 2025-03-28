@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
 
+import { ENV_CLIENT, inter } from "@/config";
 import { HeroUiProvider, NextThemeProvider, TanstackQueryProvider } from "@/contexts";
 
-import "../styles/globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://betpay24.live"),
+  metadataBase: new URL(ENV_CLIENT.NEXT_PUBLIC_BASE_URL),
   title: "BetLive24",
   description: "Watch live sports and enjoy the best matches on BetLive24.",
   keywords: [
@@ -32,7 +27,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         <HeroUiProvider>
           <NextThemeProvider>
             <TanstackQueryProvider>{children}</TanstackQueryProvider>
