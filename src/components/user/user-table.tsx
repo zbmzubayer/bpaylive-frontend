@@ -10,13 +10,19 @@ import { EditUserModal } from "@/components/user/edit-user-modal";
 import { DeleteUserModal } from "@/components/user/delete-user-modal";
 import { USER_KEY } from "@/constants/query-key";
 import { getAllUser } from "@/services";
+import { useSession } from "next-auth/react";
 
 export function UserTable() {
+  const { data: authUserData } = useSession();
+  const authUser = authUserData?.user;
+
   const { data, isFetching } = useQuery({
     queryKey: [USER_KEY],
     queryFn: getAllUser,
   });
-  const users = data?.data as User[];
+  const userData = data?.data as User[];
+
+  const users = userData?.filter((user) => user.id !== authUser?.id);
 
   return (
     <Table isStriped aria-label="User table" classNames={{ th: "text-sm" }}>
