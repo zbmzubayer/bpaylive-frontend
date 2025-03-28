@@ -5,11 +5,20 @@ import { DASHBOARD_SIDEBAR_ITEMS } from "@/constants";
 import Link from "next/link";
 import { MdLogout } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
+import { USER_ROLE } from "@/types";
 
 export default async function DashboardSidebar() {
   const session = await auth();
 
   if (!session) return null;
+
+  // If user role is subadmin then only advertisement, and dashboard route is available
+  const SIDEBAR_ITEMS =
+    session.user.role === USER_ROLE.SUB_ADMIN
+      ? DASHBOARD_SIDEBAR_ITEMS.filter(
+          (item) => item.title === "Dashboard" || item.title === "Advertisement"
+        )
+      : DASHBOARD_SIDEBAR_ITEMS;
 
   return (
     <aside className="w-[240px] border-r border-r-content3 bg-content2 p-2 shadow-lg shadow-black">
@@ -21,7 +30,7 @@ export default async function DashboardSidebar() {
         </div>
         <nav>
           <ul className="text-sm">
-            {DASHBOARD_SIDEBAR_ITEMS.map((item) => (
+            {SIDEBAR_ITEMS.map((item) => (
               <li key={item.title}>
                 <Link
                   href={item.href}

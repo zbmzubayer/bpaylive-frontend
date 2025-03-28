@@ -9,3 +9,5 @@ export const DASHBOARD_SIDEBAR_ITEMS = [
   { title: "Match", href: "/admin/match" },
   { title: "Advertisement", href: "/admin/advertisement" },
 ];
+
+export const ADMIN_ROUTES = ["/admin/user", "/admin/sport", "/admin/channel", "/admin/match"];

@@ -1,4 +1,5 @@
-import { AUTH_ROUTES, PUBLIC_ROUTES } from "@/constants";
+import { AUTH_ROUTES, PUBLIC_ROUTES, ADMIN_ROUTES } from "@/constants";
+import { USER_ROLE } from "@/types";
 import { getToken } from "next-auth/jwt";
 import withAuth, { type NextRequestWithAuth } from "next-auth/middleware";
 import { type NextFetchEvent, NextResponse } from "next/server";
@@ -13,18 +14,16 @@ export default async function middleware(req: NextRequestWithAuth, event: NextFe
     } else {
       return NextResponse.next();
     }
+  } else if (ADMIN_ROUTES.includes(pathname)) {
+    const token = await getToken({ req, secret: process.env.AUTH_SECRET });
+    if (token && token.role === USER_ROLE.SUB_ADMIN) {
+      return NextResponse.redirect(new URL("/admin/dashboard", req.nextUrl));
+    }
   }
   if (PUBLIC_ROUTES.includes(pathname)) return NextResponse.next();
+
   // if pathname starts expect /admin and not in AUTH_ROUTES
   if (!pathname.startsWith("/admin")) return NextResponse.next();
-
-  // Example custom logic: Allow access only if the pathname contains "admin"
-  // if (pathname.startsWith("/admin")) {
-  //   const userRole = req.headers.get("x-user-role"); // Example of custom role handling
-  //   if (userRole !== "admin") {
-  //     return new Response("Forbidden", { status: 403 });
-  //   }
-  // }
 
   // Continue with the NextAuth middleware
   return withAuth({ secret: process.env.AUTH_SECRET })(req, event);
