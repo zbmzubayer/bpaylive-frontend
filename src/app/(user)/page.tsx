@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Metadata } from "next";
 import { AdvertisementCarousel } from "@/components/advertisement/advertisement-carousel";
 import AdvertisementPopup from "@/components/advertisement/advertisement-popup";
