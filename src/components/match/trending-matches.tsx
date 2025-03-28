@@ -1,15 +1,14 @@
+import dayjs from "dayjs";
 import Image from "next/image";
 import { FaPlay } from "react-icons/fa6";
 import { ENV_CLIENT } from "@/config";
 import { MatchWithSportAndChannel } from "@/types";
-import { MdLiveTv } from "react-icons/md";
-import dayjs from "dayjs";
 
 export function TrendingMatches({ matches }: { matches: MatchWithSportAndChannel[] }) {
   return (
     <div>
       <h1 className="h1 mb-5">Trending Now</h1>
-      <ul className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
+      <ul className="grid grid-cols-2 gap-5 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
         {matches?.length === 0 && <p>No trending matches available</p>}
         {matches?.map((match) => (
           <li key={match.id} className="max-w-max">
@@ -33,7 +32,8 @@ export function TrendingMatches({ matches }: { matches: MatchWithSportAndChannel
               <div className="ml-2 mt-1">
                 <h3 className="line-clamp-1 font-medium">{match.title}</h3>
                 <p className="text-xs text-gray-300 dark:text-gray-400">
-                  {dayjs(match.startTime).format("MMMM D, YYYY - h:mm A")}
+                  <span className="sr-only">Match start time</span>
+                  {dayjs(match.startTime).format("MMM D, YYYY - h:mm A")}
                 </p>
               </div>
             </a>
