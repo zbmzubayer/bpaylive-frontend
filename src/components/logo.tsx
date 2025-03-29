@@ -10,7 +10,7 @@ export function Logo({ className, ...props }: LogoProps) {
       <Image
         src="/BetPay24-bg-black.svg"
         priority
-        alt="BetPay24 Logo"
+        alt="BetPayLive Logo"
         width={props.width ?? 200}
         height={props.height ?? 200}
         className={cn("size-32", className)}

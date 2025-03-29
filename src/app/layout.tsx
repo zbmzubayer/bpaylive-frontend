@@ -7,10 +7,11 @@ import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(ENV_CLIENT.NEXT_PUBLIC_BASE_URL),
-  title: "BetLive24",
-  description: "Watch live sports and enjoy the best matches on BetLive24.",
+  title: "BetPayLive",
+  description: "Watch live sports and enjoy the best matches on BetPayLive.",
   keywords: [
-    "betlive24",
+    "betpaylive",
+    "bpaylive",
     "betlive",
     "live stream",
     "watch live",

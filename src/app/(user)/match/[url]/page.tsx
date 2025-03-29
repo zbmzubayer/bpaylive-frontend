@@ -31,12 +31,13 @@ export async function generateMetadata(
   const previousImages = (await parent).openGraph?.images || [];
 
   return {
-    title: `BetLive24 | ${match.title} - Watch Live Stream`,
-    description: `Watch ${match.title} at ${dayjs(match.startTime).format("MMMM D, YYYY - h:mm A")} live stream on BetLive24. ${match.description}`,
+    title: `BetPayLive | ${match.title} - Watch Live Stream`,
+    description: `Watch ${match.title} at ${dayjs(match.startTime).format("MMMM D, YYYY - h:mm A")} live stream on BetPayLive. ${match.description}`,
     keywords: [
       match.title,
       match.sport.name,
-      "betlive24",
+      "betpaylive",
+      "bpaylive",
       "betlive",
       "live stream",
       "watch live",

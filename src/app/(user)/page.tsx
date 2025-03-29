@@ -11,9 +11,17 @@ import { getAllChannel, getAllMatches } from "@/services";
 import { getAdvertisement } from "@/services/advertisement-service";
 
 export const metadata: Metadata = {
-  title: "BetLive24 | Watch Live Stream",
-  description: "Watch live sports and enjoy the best matches on BetLive24.",
-  keywords: ["live stream", "watch live", "live sports", "betlive24", "sports", "advertisement"],
+  title: "BetPayLive | Watch Live Stream",
+  description: "Watch live sports and enjoy the best matches on BetPayLive.",
+  keywords: [
+    "live stream",
+    "watch live",
+    "live sports",
+    "bpaylive",
+    "betpaylive",
+    "sports",
+    "advertisement",
+  ],
 };
 
 export default async function Home() {
