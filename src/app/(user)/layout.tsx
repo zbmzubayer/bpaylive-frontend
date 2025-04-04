@@ -5,7 +5,7 @@ export default function UserLayout({ children }: Readonly<{ children: React.Reac
   return (
     <div className="text-white">
       <Header />
-      <main className="container min-h-screen">{children}</main>
+      <main className="container min-h-screen py-3">{children}</main>
       <Footer />
     </div>
   );
