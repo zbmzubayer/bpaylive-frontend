@@ -38,7 +38,7 @@ export function EditMatchForm({ match, onClose }: Props) {
   const sports = sportData.data;
   const channels = channelData.data;
 
-  const { control, handleSubmit, formState, getValues } = useForm<FormValues>({
+  const { control, handleSubmit, formState } = useForm<FormValues>({
     resolver: zodResolver(matchZodSchema.create),
     values: {
       title: match.title,
@@ -55,8 +55,6 @@ export function EditMatchForm({ match, onClose }: Props) {
         : undefined,
     },
   });
-
-  console.log(getValues("channelMatches"));
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: updateMatch,
