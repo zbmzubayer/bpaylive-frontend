@@ -8,6 +8,7 @@ import {
   Alert,
   Button,
   DatePicker,
+  form,
   Input,
   Select,
   SelectItem,
@@ -71,8 +72,9 @@ export function CreateMatchForm({ onClose }: { onClose: () => void }) {
     // formData.append("hasFakeViews", data.hasFakeViews ? "true" : "false");
     formData.append("sportId", data.sportId);
     formData.append("defaultChannelId", data.defaultChannelId);
-    formData.append("channelMatches", JSON.stringify(data.channelMatches));
-
+    if (data.channelMatches) {
+      formData.append("channelMatches", JSON.stringify(data.channelMatches));
+    }
     await mutateAsync(formData);
   };
 

@@ -38,7 +38,7 @@ export function EditMatchForm({ match, onClose }: Props) {
   const sports = sportData.data;
   const channels = channelData.data;
 
-  const { control, handleSubmit, formState } = useForm<FormValues>({
+  const { control, handleSubmit, formState, getValues } = useForm<FormValues>({
     resolver: zodResolver(matchZodSchema.create),
     values: {
       title: match.title,
@@ -50,9 +50,13 @@ export function EditMatchForm({ match, onClose }: Props) {
       // hasFakeViews: match.hasFakeViews,
       sportId: match.sportId,
       defaultChannelId: match.defaultChannelId,
-      channelMatches: channelMatches?.map((item) => item.channel.id),
+      channelMatches: channelMatches.length
+        ? channelMatches.map((item) => item.channel.id)
+        : undefined,
     },
   });
+
+  console.log(getValues("channelMatches"));
 
   const { mutateAsync, isPending, error } = useMutation({
     mutationFn: updateMatch,
@@ -78,7 +82,9 @@ export function EditMatchForm({ match, onClose }: Props) {
     // formData.append("hasFakeViews", data.hasFakeViews!.toString());
     formData.append("sportId", data.sportId);
     formData.append("defaultChannelId", data.defaultChannelId);
-    formData.append("channelMatches", JSON.stringify(data.channelMatches));
+    if (data.channelMatches) {
+      formData.append("channelMatches", JSON.stringify(data.channelMatches));
+    }
 
     await mutateAsync({ id: match.id, data: formData });
   };
