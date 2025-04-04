@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   keywords: [
     "betpaylive",
     "bpaylive",
-    "betlive",
     "live stream",
     "watch live",
     "live sports",
@@ -29,7 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta httpEquiv="Content-Security-Policy" content="default-src http: https:;" />
+        <meta httpEquiv="Content-Security-Policy" content="connect-src http: https:;" />
       </head>
       <body className={`${inter.className} antialiased`}>
         <HeroUiProvider>

@@ -38,7 +38,6 @@ export async function generateMetadata(
       match.sport.name,
       "betpaylive",
       "bpaylive",
-      "betlive",
       "live stream",
       "watch live",
       "live sports",
