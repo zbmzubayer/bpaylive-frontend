@@ -17,7 +17,7 @@ export function TrendingMatches({ matches }: { matches: MatchWithSportAndChannel
                 <div className="absolute left-3 top-3 z-10 flex items-center justify-center rounded-md bg-red-500 px-1.5 py-0.5 text-white">
                   <span className="text-xs md:text-sm">Live</span>
                 </div>
-                <div className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-zinc-300 p-2 text-zinc-700">
+                <div className="absolute left-1/2 top-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-red-500 p-2 text-white">
                   <FaPlay className="size-4 md:size-6" />
                 </div>
                 <Image
