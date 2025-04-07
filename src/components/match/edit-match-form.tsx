@@ -38,7 +38,7 @@ export function EditMatchForm({ match, onClose }: Props) {
   const sports = sportData.data;
   const channels = channelData.data;
 
-  const { control, handleSubmit, formState } = useForm<FormValues>({
+  const { control, handleSubmit, formState, setValue } = useForm<FormValues>({
     resolver: zodResolver(matchZodSchema.create),
     values: {
       title: match.title,
@@ -107,7 +107,13 @@ export function EditMatchForm({ match, onClose }: Props) {
             name="title"
             render={({ field, fieldState: { error, invalid } }) => (
               <Input
-                {...field}
+                value={field.value}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const url = value.replace(/\s+/g, "-").toLowerCase();
+                  field.onChange(value);
+                  setValue("url", url);
+                }}
                 label="Title"
                 placeholder="Enter the title"
                 labelPlacement="outside"
@@ -195,6 +201,7 @@ export function EditMatchForm({ match, onClose }: Props) {
                 onChange={(value) => handleDateChange(value, field.onChange)}
                 granularity="second"
                 hideTimeZone
+                hourCycle={24}
                 showMonthAndYearPickers
                 label="Match Start Time"
                 labelPlacement="outside"
