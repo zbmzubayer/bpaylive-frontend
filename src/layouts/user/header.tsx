@@ -99,19 +99,21 @@ function ChannelsDropdownMenu({
         {isFetching && <Spinner />}
         <ul className="rounded-lg py-1 shadow-small">
           {channels?.map((item) => (
-            <li
-              key={item.id}
-              className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-background dark:hover:bg-default-400"
-            >
-              <Image
-                src={item.icon as string}
-                alt={item.title}
-                crossOrigin="anonymous"
-                width={24}
-                height={24}
-                className="aspect-square rounded-full"
-              />
-              {item.title}
+            <li key={item.id}>
+              <a
+                href={`/channel/${item.id}`}
+                className="flex items-center gap-2 px-4 py-2 text-sm hover:bg-background dark:hover:bg-default-400"
+              >
+                <Image
+                  src={item.icon as string}
+                  alt={item.title}
+                  crossOrigin="anonymous"
+                  width={24}
+                  height={24}
+                  className="aspect-square rounded-full"
+                />
+                {item.title}
+              </a>
             </li>
           ))}
           {channels?.length === 0 && (

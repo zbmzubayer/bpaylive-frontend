@@ -78,16 +78,21 @@ export default function MenuDrawer() {
                 <AccordionItem key="channels" aria-label="Channels" title="Channels">
                   <ul>
                     {channels?.map((item) => (
-                      <li key={item.id} className="my-1 rounded-md border border-border px-3 py-2">
-                        <Image
-                          src={item.icon as string}
-                          alt={item.title}
-                          width={20}
-                          height={20}
-                          crossOrigin="anonymous"
-                          className="mr-2 inline-block size-4 rounded-sm bg-white"
-                        />
-                        {item.title}
+                      <li key={item.id} className="my-1">
+                        <a
+                          href={`/channel/${item.id}`}
+                          className="inline-flex w-full items-center rounded-md border border-border px-3 py-2"
+                        >
+                          <Image
+                            src={item.icon as string}
+                            alt={item.title}
+                            width={20}
+                            height={20}
+                            crossOrigin="anonymous"
+                            className="mr-2 inline-block size-4 rounded-sm bg-white"
+                          />
+                          {item.title}
+                        </a>
                       </li>
                     ))}
                   </ul>

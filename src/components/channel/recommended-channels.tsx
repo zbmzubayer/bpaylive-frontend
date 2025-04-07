@@ -10,14 +10,16 @@ export function RecommendedChannels({ channels }: { channels: ChannelWithSports[
         {channels?.length === 0 && <p>No trending matches available</p>}
         {channels?.map((item) => (
           <li key={item.id} className="border-2 border-black">
-            <Image
-              src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${item.icon}`}
-              alt={item.title}
-              width={500}
-              height={500}
-              crossOrigin="anonymous"
-              className="aspect-[4/3] object-cover"
-            />
+            <a href={`/channel/${item.id}`}>
+              <Image
+                src={`${ENV_CLIENT.NEXT_PUBLIC_STORAGE_URL}/${item.icon}`}
+                alt={item.title}
+                width={500}
+                height={500}
+                crossOrigin="anonymous"
+                className="aspect-[4/3] object-cover"
+              />
+            </a>
           </li>
         ))}
       </ul>
