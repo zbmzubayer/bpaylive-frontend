@@ -4,6 +4,7 @@ import { ENV_CLIENT, inter } from "@/config";
 import { HeroUiProvider, NextThemeProvider, TanstackQueryProvider } from "@/contexts";
 
 import "@/styles/globals.css";
+import { GoogleAnalytics } from "@/components/google-analytics";
 
 export const metadata: Metadata = {
   metadataBase: new URL(ENV_CLIENT.NEXT_PUBLIC_BASE_URL),
@@ -15,7 +16,6 @@ export const metadata: Metadata = {
     "live stream",
     "watch live",
     "live sports",
-    "sports",
     "advertisement",
     "live",
     "stream",
@@ -34,6 +34,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           </NextThemeProvider>
         </HeroUiProvider>
       </body>
+      <GoogleAnalytics />
     </html>
   );
 }
